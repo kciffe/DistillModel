@@ -17,6 +17,10 @@ EntityType = Literal[
     "command_system",
     "propulsion_system",
     "compartment",
+    "weapon_system",
+    "communication_system",
+    "electronic_system",
+    "hull_structure",
     "equipment",
 ]
 
@@ -38,6 +42,9 @@ class Entity(BaseModel):
     attributes: dict[str, str] = Field(default_factory=dict)
     relations: list[Relation] = Field(default_factory=list)
     evidence: list[Evidence] = Field(default_factory=list)
+    # 这两个字段主要用于调试和人工复核；不会参与实体匹配。
+    type_reason: str = ""
+    confidence: Optional[float] = None
 
 
 class EntityExtraction(BaseModel):
@@ -87,6 +94,7 @@ class MetricCounts(BaseModel):
 class PairEvaluation(BaseModel):
     chunk_id: str
     reference_source: str = "model_a_pseudo_gold"
+    prediction_source: str = "model_b"
     metrics: dict[str, float] = Field(default_factory=dict)
     counts: dict[str, dict[str, int]] = Field(default_factory=dict)
     errors: dict[str, list[dict[str, Any]]] = Field(default_factory=dict)
@@ -99,6 +107,7 @@ class SummaryReport(BaseModel):
     model_a: str
     model_b: str
     reference_source: str
+    prediction_source: str = "model_b"
     chunk_count: int
     metrics: dict[str, float]
     counts: dict[str, dict[str, int]]
@@ -116,5 +125,9 @@ class WorkflowState(BaseModel):
     normalized_a: list[EntityExtraction] = Field(default_factory=list)
     normalized_b: list[EntityExtraction] = Field(default_factory=list)
     pair_evals: list[PairEvaluation] = Field(default_factory=list)
+    gold_evals_a: list[PairEvaluation] = Field(default_factory=list)
+    gold_evals_b: list[PairEvaluation] = Field(default_factory=list)
     summary: SummaryReport | None = None
+    summary_a: SummaryReport | None = None
+    summary_b: SummaryReport | None = None
     errors: list[str] = Field(default_factory=list)

@@ -54,7 +54,7 @@ def parse_json_object(text: str) -> tuple[dict[str, Any] | None, str | None]:
 
 
 class OpenAICompatibleClient:
-    def __init__(self, config: ModelConfig, timeout: float = 120.0):
+    def __init__(self, config: ModelConfig, timeout: float = 180.0):
         self.config = config
         self.client = OpenAI(
             base_url=config.base_url,
@@ -62,12 +62,35 @@ class OpenAICompatibleClient:
             timeout=timeout,
         )
 
+    def _chat(self, messages: list[dict[str, str]]) -> str:
+        kwargs: dict[str, Any] = {
+            "model": self.config.name,
+            "messages": messages,
+            "temperature": self.config.temperature,
+            "max_tokens": self.config.max_tokens,
+        }
+        if self.config.extra_body:
+            kwargs["extra_body"] = self.config.extra_body
+        if self.config.json_mode:
+            kwargs["response_format"] = {"type": "json_object"}
+        try:
+            response = self.client.chat.completions.create(**kwargs)
+        except Exception as first_exc:
+            # 有些 OpenAI-compatible 服务不支持 response_format；自动降级重试。
+            if "response_format" not in kwargs:
+                raise
+            kwargs.pop("response_format", None)
+            try:
+                response = self.client.chat.completions.create(**kwargs)
+            except Exception:
+                raise first_exc
+        return response.choices[0].message.content or ""
+
     def extract_entities(self, chunk: TextChunk) -> EntityExtraction:
         raw = ""
         try:
-            response = self.client.chat.completions.create(
-                model=self.config.name,
-                messages=[
+            raw = self._chat(
+                [
                     {"role": "system", "content": EXTRACTION_SYSTEM_PROMPT},
                     {
                         "role": "user",
@@ -78,10 +101,8 @@ class OpenAICompatibleClient:
                             chunk.text,
                         ),
                     },
-                ],
-                temperature=0,
+                ]
             )
-            raw = response.choices[0].message.content or ""
             parsed, error = parse_json_object(raw)
             if error or parsed is None:
                 return EntityExtraction(
@@ -122,9 +143,8 @@ class OpenAICompatibleClient:
     def judge_evaluation(self, chunk_text: str, reference_json: str, prediction_json: str) -> tuple[dict[str, Any] | None, str | None]:
         raw = ""
         try:
-            response = self.client.chat.completions.create(
-                model=self.config.name,
-                messages=[
+            raw = self._chat(
+                [
                     {"role": "system", "content": EVALUATION_SYSTEM_PROMPT},
                     {
                         "role": "user",
@@ -134,10 +154,8 @@ class OpenAICompatibleClient:
                             prediction_json,
                         ),
                     },
-                ],
-                temperature=0,
+                ]
             )
-            raw = response.choices[0].message.content or ""
             return parse_json_object(raw)
         except Exception as exc:
             return None, f"{type(exc).__name__}: {exc}"
