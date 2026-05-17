@@ -24,7 +24,8 @@ def runner():
     config={
         "configurable":{
             "thread_id":str(uuid4().hex),
-        }
+        },
+        "max_concurrency": 16,
     }
     return mainGraph.invoke(
         datasetState,

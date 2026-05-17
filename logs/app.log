@@ -48,3 +48,237 @@
 ✅ [SUCCESS] 生成了20道问题
 ✅ [SUCCESS] 生成了20道问题
 ✅ [SUCCESS] 生成了20道问题
+ℹ️ [INFO] 正在初始化任务
+ℹ️ [INFO] 正在准备任务批次
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：2，批次大小：20，批次开始索引：0，批次结束索引：20
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：3，批次大小：20，批次开始索引：20，批次结束索引：40
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：4，批次大小：20，批次开始索引：40，批次结束索引：60
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：5，批次大小：20，批次开始索引：60，批次结束索引：80
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：6，批次大小：20，批次开始索引：80，批次结束索引：100
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：7，批次大小：20，批次开始索引：100，批次结束索引：120
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：8，批次大小：20，批次开始索引：120，批次结束索引：140
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：9，批次大小：20，批次开始索引：140，批次结束索引：160
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：10，批次大小：20，批次开始索引：160，批次结束索引：180
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：11，批次大小：20，批次开始索引：180，批次结束索引：200
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：12，批次大小：20，批次开始索引：200，批次结束索引：220
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：13，批次大小：20，批次开始索引：220，批次结束索引：240
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：14，批次大小：20，批次开始索引：240，批次结束索引：260
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：15，批次大小：20，批次开始索引：260，批次结束索引：280
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：16，批次大小：20，批次开始索引：280，批次结束索引：300
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：17，批次大小：20，批次开始索引：300，批次结束索引：320
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：18，批次大小：20，批次开始索引：320，批次结束索引：340
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：19，批次大小：20，批次开始索引：340，批次结束索引：360
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：20，批次大小：20，批次开始索引：360，批次结束索引：380
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：21，批次大小：20，批次开始索引：380，批次结束索引：400
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：22，批次大小：20，批次开始索引：400，批次结束索引：420
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：23，批次大小：20，批次开始索引：420，批次结束索引：440
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：24，批次大小：20，批次开始索引：440，批次结束索引：460
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：25，批次大小：20，批次开始索引：460，批次结束索引：480
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：26，批次大小：20，批次开始索引：480，批次结束索引：500
+ℹ️ [INFO] 正在路由任务批次
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+ℹ️ [INFO] 正在生成问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+✅ [SUCCESS] 生成了20道问题
+ℹ️ [INFO] 正在初始化任务
+ℹ️ [INFO] 正在准备任务批次
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：2，批次大小：20，批次开始索引：0，批次结束索引：20
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：3，批次大小：20，批次开始索引：20，批次结束索引：40
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：4，批次大小：20，批次开始索引：40，批次结束索引：60
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：5，批次大小：20，批次开始索引：60，批次结束索引：80
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：6，批次大小：20，批次开始索引：80，批次结束索引：100
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：7，批次大小：20，批次开始索引：100，批次结束索引：120
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：8，批次大小：20，批次开始索引：120，批次结束索引：140
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：9，批次大小：20，批次开始索引：140，批次结束索引：160
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：10，批次大小：20，批次开始索引：160，批次结束索引：180
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：11，批次大小：20，批次开始索引：180，批次结束索引：200
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：12，批次大小：20，批次开始索引：200，批次结束索引：220
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：13，批次大小：20，批次开始索引：220，批次结束索引：240
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：14，批次大小：20，批次开始索引：240，批次结束索引：260
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：15，批次大小：20，批次开始索引：260，批次结束索引：280
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：16，批次大小：20，批次开始索引：280，批次结束索引：300
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：17，批次大小：20，批次开始索引：300，批次结束索引：320
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：18，批次大小：20，批次开始索引：320，批次结束索引：340
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：19，批次大小：20，批次开始索引：340，批次结束索引：360
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：20，批次大小：20，批次开始索引：360，批次结束索引：380
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：21，批次大小：20，批次开始索引：380，批次结束索引：400
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：22，批次大小：20，批次开始索引：400，批次结束索引：420
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：23，批次大小：20，批次开始索引：420，批次结束索引：440
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：24，批次大小：20，批次开始索引：440，批次结束索引：460
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：25，批次大小：20，批次开始索引：460，批次结束索引：480
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：26，批次大小：20，批次开始索引：480，批次结束索引：500
+ℹ️ [INFO] 正在路由任务批次
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=1 count=20 thread=140088660190784
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=2 count=20 thread=140088651798080
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=4 count=20 thread=140088633964096
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=8 count=20 thread=140088260417088
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=10 count=20 thread=140088243631680
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=5 count=20 thread=140088625571392
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=3 count=20 thread=140088643405376
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=6 count=20 thread=140088277202496
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=7 count=20 thread=140088268809792
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=22 count=20 thread=140087186675264
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=12 count=20 thread=140088226846272
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=11 count=20 thread=140088235238976
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=15 count=20 thread=140087723546176
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=17 count=20 thread=140087706760768
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=21 count=20 thread=140087195067968
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=13 count=20 thread=140087740331584
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=14 count=20 thread=140087731938880
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=9 count=20 thread=140088252024384
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=16 count=20 thread=140087715153472
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=18 count=20 thread=140087698368064
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=19 count=20 thread=140087689975360
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=25 count=20 thread=140087161497152
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=20 count=20 thread=140087203460672
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=23 count=20 thread=140087178282560
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=24 count=20 thread=140087169889856
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=20 生成数=20 thread=140087203460672 elapsed=15.77s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=11 生成数=20 thread=140088235238976 elapsed=16.21s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=19 生成数=20 thread=140087689975360 elapsed=16.84s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=2 生成数=20 thread=140088651798080 elapsed=17.02s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=24 生成数=20 thread=140087169889856 elapsed=17.36s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=7 生成数=20 thread=140088268809792 elapsed=18.44s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=1 生成数=20 thread=140088660190784 elapsed=22.33s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=16 生成数=20 thread=140087715153472 elapsed=28.39s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=22 生成数=20 thread=140087186675264 elapsed=29.93s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=17 生成数=20 thread=140087706760768 elapsed=30.59s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=4 生成数=20 thread=140088633964096 elapsed=31.13s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=9 生成数=20 thread=140088252024384 elapsed=31.56s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=25 生成数=20 thread=140087161497152 elapsed=35.64s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=10 生成数=20 thread=140088243631680 elapsed=37.30s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=6 生成数=20 thread=140088277202496 elapsed=42.86s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=23 生成数=20 thread=140087178282560 elapsed=45.01s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=12 生成数=19 thread=140088226846272 elapsed=45.85s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=15 生成数=20 thread=140087723546176 elapsed=47.23s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=21 生成数=20 thread=140087195067968 elapsed=47.72s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=13 生成数=20 thread=140087740331584 elapsed=50.65s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=8 生成数=20 thread=140088260417088 elapsed=52.47s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=5 生成数=20 thread=140088625571392 elapsed=55.86s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=14 生成数=20 thread=140087731938880 elapsed=58.64s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=3 生成数=20 thread=140088643405376 elapsed=64.67s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=18 生成数=20 thread=140087698368064 elapsed=65.08s
+ℹ️ [INFO] 正在初始化任务
+ℹ️ [INFO] 正在准备任务批次
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：2，批次大小：20，批次开始索引：0，批次结束索引：20
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：3，批次大小：20，批次开始索引：20，批次结束索引：40
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：4，批次大小：20，批次开始索引：40，批次结束索引：60
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：5，批次大小：20，批次开始索引：60，批次结束索引：80
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：6，批次大小：20，批次开始索引：80，批次结束索引：100
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：7，批次大小：20，批次开始索引：100，批次结束索引：120
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：8，批次大小：20，批次开始索引：120，批次结束索引：140
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：9，批次大小：20，批次开始索引：140，批次结束索引：160
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：10，批次大小：20，批次开始索引：160，批次结束索引：180
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：11，批次大小：20，批次开始索引：180，批次结束索引：200
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：12，批次大小：20，批次开始索引：200，批次结束索引：220
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：13，批次大小：20，批次开始索引：220，批次结束索引：240
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：14，批次大小：20，批次开始索引：240，批次结束索引：260
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：15，批次大小：20，批次开始索引：260，批次结束索引：280
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：16，批次大小：20，批次开始索引：280，批次结束索引：300
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：17，批次大小：20，批次开始索引：300，批次结束索引：320
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：18，批次大小：20，批次开始索引：320，批次结束索引：340
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：19，批次大小：20，批次开始索引：340，批次结束索引：360
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：20，批次大小：20，批次开始索引：360，批次结束索引：380
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：21，批次大小：20，批次开始索引：380，批次结束索引：400
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：22，批次大小：20，批次开始索引：400，批次结束索引：420
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：23，批次大小：20，批次开始索引：420，批次结束索引：440
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：24，批次大小：20，批次开始索引：440，批次结束索引：460
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：25，批次大小：20，批次开始索引：460，批次结束索引：480
+ℹ️ [INFO] 创建任务批次：结婚登记与条件，批次ID：26，批次大小：20，批次开始索引：480，批次结束索引：500
+ℹ️ [INFO] 正在路由任务批次
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=1 count=20 thread=139751720879680
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=6 count=20 thread=139751678899776
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=4 count=20 thread=139751695701568
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=2 count=20 thread=139751712486976
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=13 count=20 thread=139751147415104
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=5 count=20 thread=139751687308864
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=3 count=20 thread=139751704094272
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=8 count=20 thread=139751189378624
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=7 count=20 thread=139751670490688
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=16 count=20 thread=139750644115008
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=9 count=20 thread=139751180985920
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=10 count=20 thread=139751172593216
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=12 count=20 thread=139751155807808
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=15 count=20 thread=139750652507712
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=11 count=20 thread=139751164200512
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=14 count=20 thread=139751139022400
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=17 count=20 thread=139750635722304
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=19 count=20 thread=139750618936896
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=18 count=20 thread=139750627329600
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=20 count=20 thread=139750610544192
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=24 count=20 thread=139750098851392
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=22 count=20 thread=139750115636800
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=23 count=20 thread=139750107244096
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=25 count=20 thread=139750090458688
+ℹ️ [INFO] 开始生成问题：category=结婚登记与条件 batch_id=21 count=20 thread=139750602151488
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=7 生成数=20 thread=139751670490688 elapsed=12.86s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=14 生成数=20 thread=139751139022400 elapsed=14.56s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=21 生成数=20 thread=139750602151488 elapsed=14.90s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=20 生成数=20 thread=139750610544192 elapsed=16.14s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=13 生成数=20 thread=139751147415104 elapsed=16.32s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=4 生成数=20 thread=139751695701568 elapsed=16.91s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=25 生成数=20 thread=139750090458688 elapsed=26.05s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=10 生成数=20 thread=139751172593216 elapsed=28.98s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=1 生成数=20 thread=139751720879680 elapsed=31.03s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=15 生成数=20 thread=139750652507712 elapsed=31.88s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=8 生成数=20 thread=139751189378624 elapsed=32.89s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=5 生成数=20 thread=139751687308864 elapsed=33.27s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=12 生成数=20 thread=139751155807808 elapsed=36.70s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=3 生成数=20 thread=139751704094272 elapsed=41.93s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=24 生成数=20 thread=139750098851392 elapsed=44.13s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=9 生成数=20 thread=139751180985920 elapsed=46.33s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=19 生成数=20 thread=139750618936896 elapsed=49.28s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=11 生成数=20 thread=139751164200512 elapsed=49.71s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=2 生成数=20 thread=139751712486976 elapsed=51.04s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=6 生成数=20 thread=139751678899776 elapsed=51.55s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=16 生成数=20 thread=139750644115008 elapsed=51.79s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=23 生成数=20 thread=139750107244096 elapsed=56.09s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=17 生成数=20 thread=139750635722304 elapsed=61.77s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=18 生成数=20 thread=139750627329600 elapsed=63.65s
+✅ [SUCCESS] 完成生成问题：category=结婚登记与条件 batch_id=22 生成数=20 thread=139750115636800 elapsed=69.67s

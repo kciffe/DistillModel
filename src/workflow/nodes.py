@@ -1,4 +1,7 @@
 
+import threading
+import time
+
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.types import Send
 from .getmodel import get_llm_without_tools
@@ -108,14 +111,22 @@ def route_task_batches(state:DataState):
     ]
 # 生成问题节点
 def generate_question_llm(state: DataState):
-    log_info("正在生成问题")
     task=state.get("current_task")
     if task is None:
         return {}
+
+    thread_id=threading.get_ident()
+    started_at=time.perf_counter()
+    log_info(
+        f"开始生成问题：category={task['category']} batch_id={task['batch_id']} "
+        f"count={task['count']} thread={thread_id}"
+    )
     
     prompt=f"""
         你是一位婚姻法方面的专家，根据【特定类别】的定义，针对其中{task["category"]}方面的规定，向学生提供{task["count"]}道练习题，你能提出哪些问题？
         每个问题单独一行，只允许输出问题本身，不允许输出任何其他字符。
+        禁止添加序号、编号、项目符号、Markdown列表符号或解释说明。
+        正确格式示例：婚姻登记机关审查结婚登记申请时需要核验哪些条件？
 
         【特定类别】
         {task["category"]}：{task["description"]}
@@ -141,7 +152,11 @@ def generate_question_llm(state: DataState):
         }
         for question in question_list
     ]
-    log_success(f"生成了{len(questions)}道问题")
+    elapsed=time.perf_counter()-started_at
+    log_success(
+        f"完成生成问题：category={task['category']} batch_id={task['batch_id']} "
+        f"生成数={len(questions)} thread={thread_id} elapsed={elapsed:.2f}s"
+    )
     return {
         "questions":questions,
         "messages":[

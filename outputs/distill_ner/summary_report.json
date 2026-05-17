@@ -1,0 +1,82 @@
+{
+  "input_md": "课件/MinerU_markdown_二战后苏俄舰艇全纪录_2055582301166436352.md",
+  "output_dir": "outputs/distill_ner",
+  "model_a": "Qwen/Qwen3-32B-AWQ",
+  "model_b": "Qwen/Qwen3-32B-AWQ",
+  "reference_source": "model_a_pseudo_gold",
+  "chunk_count": 9,
+  "metrics": {
+    "entity_precision": 0.963855,
+    "entity_recall": 0.97561,
+    "entity_f1": 0.969697,
+    "attribute_precision": 0.925926,
+    "attribute_recall": 0.904977,
+    "attribute_f1": 0.915332,
+    "relation_precision": 0.979866,
+    "relation_recall": 0.966887,
+    "relation_f1": 0.973333
+  },
+  "counts": {
+    "entity": {
+      "tp": 80,
+      "fp": 3,
+      "fn": 2
+    },
+    "attribute": {
+      "tp": 200,
+      "fp": 16,
+      "fn": 21
+    },
+    "relation": {
+      "tp": 146,
+      "fp": 3,
+      "fn": 5
+    }
+  },
+  "errors_by_type": {
+    "missing_entity": 2,
+    "extra_entity": 3,
+    "wrong_type": 0,
+    "missing_attribute": 19,
+    "wrong_attribute_value": 2,
+    "wrong_relation": 5,
+    "wrong_attachment": 0
+  },
+  "chunk_errors": [
+    {
+      "chunk_id": "chunk_0003",
+      "error_type": "wrong_attribute_value",
+      "count": 1
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "missing_entity",
+      "count": 2
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "extra_entity",
+      "count": 3
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "missing_attribute",
+      "count": 14
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "wrong_relation",
+      "count": 5
+    },
+    {
+      "chunk_id": "chunk_0005",
+      "error_type": "missing_attribute",
+      "count": 5
+    },
+    {
+      "chunk_id": "chunk_0005",
+      "error_type": "wrong_attribute_value",
+      "count": 1
+    }
+  ]
+}
