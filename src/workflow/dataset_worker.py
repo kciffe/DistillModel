@@ -35,5 +35,5 @@ def runner():
 
 if __name__=="__main__":
     result=runner()
-    for question in result.get("questions", []):
+    for question in result.get("final_data", []):
         print(question)

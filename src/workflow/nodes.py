@@ -1,4 +1,5 @@
 
+import hashlib
 import threading
 import time
 
@@ -123,6 +124,69 @@ def generate_question_llm(state: DataState):
         "messages":[
             AIMessage(content=response.content)
         ]
+    }
+
+# simhash去重节点
+SIMHASH_BITS=64
+SIMHASH_THRESHOLD=6
+
+# 计算 SimHash
+def _simhash(text: str) -> int:
+    weights=[0]*SIMHASH_BITS
+    tokens=[text[i:i+2] for i in range(max(len(text)-1,1))]
+
+    for token in tokens:
+        digest=hashlib.md5(token.encode("utf-8")).digest()
+        value=int.from_bytes(digest[:8],"big")
+        for bit_index in range(SIMHASH_BITS):
+            if value & (1 << bit_index):
+                weights[bit_index]+=1
+            else:
+                weights[bit_index]-=1
+
+    fingerprint=0
+    for bit_index, weight in enumerate(weights):
+        if weight > 0:
+            fingerprint |= 1 << bit_index
+    return fingerprint
+
+# 计算海明距离
+def _hamming_distance(left: int, right: int) -> int:
+    return (left ^ right).bit_count()
+
+
+def deduplicate_questions(state: DataState):
+    log_info("正在去重")
+    questions=state.get("questions") or []
+    deduplicated_questions=[]
+    # 保存已经见过的原始问题文本，用于完全相同文本去重。
+    seen_questions=set()
+    # 保存已经保留问题的 SimHash 指纹和文本，用于相似问题去重。
+    seen_fingerprints=[]
+
+    for question in questions:
+        text=question["question"].strip()
+        if text in seen_questions:
+            continue
+
+        fingerprint=_simhash(text)
+        duplicate_question=None
+        for seen_fingerprint, seen_text in seen_fingerprints:
+            if _hamming_distance(fingerprint, seen_fingerprint) <= SIMHASH_THRESHOLD:
+                duplicate_question=seen_text
+                break
+
+        if duplicate_question is not None:
+            log_info(f"当前条目为：{text},库中已存在相似条目：{duplicate_question}")
+            continue
+
+        seen_questions.add(text)
+        seen_fingerprints.append((fingerprint,text))
+        deduplicated_questions.append(question)
+
+    log_success(f"去重完成：原始{len(questions)}条，保留{len(deduplicated_questions)}条")
+    return {
+        "final_data":deduplicated_questions
     }
 
 # 打分节点
