@@ -1,0 +1,40 @@
+{
+  "task": "entity_only_equipment_ner",
+  "input_md": "课件/MinerU_markdown_二战后苏俄舰艇全纪录.md",
+  "gold_jsonl": "src/workflow/distill_ner/gold/gold_entities_soviet_H_article_v1_min1200_max2600.jsonl",
+  "chunk_count": 4,
+  "model_a": {
+    "name": "deepseek-v4-pro",
+    "metrics": {
+      "entity_precision": 0.945205,
+      "entity_recall": 0.71134,
+      "entity_f1": 0.811765,
+      "type_accuracy": 0.927536
+    },
+    "counts": {
+      "tp": 69,
+      "fp": 4,
+      "fn": 28,
+      "wrong_type": 5,
+      "parse_error_count": 0
+    }
+  },
+  "model_b": {
+    "name": "Qwen/Qwen3-32B-AWQ",
+    "metrics": {
+      "entity_precision": 0.859375,
+      "entity_recall": 0.56701,
+      "entity_f1": 0.68323,
+      "type_accuracy": 0.927273
+    },
+    "counts": {
+      "tp": 55,
+      "fp": 9,
+      "fn": 42,
+      "wrong_type": 4,
+      "parse_error_count": 0
+    }
+  },
+  "f1_gap_model_a_minus_model_b": 0.128535,
+  "recall_gap_model_a_minus_model_b": 0.14433
+}

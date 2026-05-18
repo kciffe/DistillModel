@@ -39,12 +39,17 @@ class Entity(BaseModel):
     name: str = ""
     type: EntityType | str = "equipment"
     aliases: list[str] = Field(default_factory=list)
+    evidence: list[Evidence] = Field(default_factory=list)
+
+    # 用于保留嵌套线索，但当前实体识别评测不强制计分
+    parent: str | None = None
+    level: int | None = None
+    type_reason: str = ""
+    confidence: float | None = None
+
+    # 兼容旧 gold / 旧模型输出；当前 entity-only 评测直接忽略
     attributes: dict[str, str] = Field(default_factory=dict)
     relations: list[Relation] = Field(default_factory=list)
-    evidence: list[Evidence] = Field(default_factory=list)
-    # 这两个字段主要用于调试和人工复核；不会参与实体匹配。
-    type_reason: str = ""
-    confidence: Optional[float] = None
 
 
 class EntityExtraction(BaseModel):
@@ -55,6 +60,9 @@ class EntityExtraction(BaseModel):
     raw_response: str = ""
     error: Optional[str] = None
     model_name: str = ""
+    finish_reason: str = ""
+    retry_count: int = 0
+    json_mode_fallback: bool = False
 
 
 class TextChunk(BaseModel):
@@ -64,10 +72,12 @@ class TextChunk(BaseModel):
     text: str
 
 
-class MetricCounts(BaseModel):
+class EntityEvalCounts(BaseModel):
     tp: int = 0
     fp: int = 0
     fn: int = 0
+    wrong_type: int = 0
+    parse_error_count: int = 0
 
     @property
     def precision(self) -> float:
@@ -83,34 +93,36 @@ class MetricCounts(BaseModel):
         r = self.recall
         return 2 * p * r / (p + r) if p + r else 0.0
 
-    def as_metrics(self, prefix: str) -> dict[str, float]:
+    @property
+    def type_accuracy(self) -> float:
+        return (self.tp - self.wrong_type) / self.tp if self.tp else 0.0
+
+    def metrics(self) -> dict[str, float]:
         return {
-            f"{prefix}_precision": round(self.precision, 6),
-            f"{prefix}_recall": round(self.recall, 6),
-            f"{prefix}_f1": round(self.f1, 6),
+            "entity_precision": round(self.precision, 6),
+            "entity_recall": round(self.recall, 6),
+            "entity_f1": round(self.f1, 6),
+            "type_accuracy": round(self.type_accuracy, 6),
         }
 
 
-class PairEvaluation(BaseModel):
+class EntityEvaluation(BaseModel):
     chunk_id: str
-    reference_source: str = "model_a_pseudo_gold"
-    prediction_source: str = "model_b"
+    model_name: str = ""
     metrics: dict[str, float] = Field(default_factory=dict)
-    counts: dict[str, dict[str, int]] = Field(default_factory=dict)
+    counts: dict[str, int] = Field(default_factory=dict)
     errors: dict[str, list[dict[str, Any]]] = Field(default_factory=dict)
-    llm_judgement: dict[str, Any] | None = None
 
 
-class SummaryReport(BaseModel):
+class EntitySummaryReport(BaseModel):
     input_md: str
     output_dir: str
-    model_a: str
-    model_b: str
-    reference_source: str
-    prediction_source: str = "model_b"
+    gold_jsonl: str = ""
+    model_name: str
+    prediction_source: str
     chunk_count: int
     metrics: dict[str, float]
-    counts: dict[str, dict[str, int]]
+    counts: dict[str, int]
     errors_by_type: dict[str, int]
     chunk_errors: list[dict[str, Any]] = Field(default_factory=list)
 
@@ -124,10 +136,9 @@ class WorkflowState(BaseModel):
     model_b_results: list[EntityExtraction] = Field(default_factory=list)
     normalized_a: list[EntityExtraction] = Field(default_factory=list)
     normalized_b: list[EntityExtraction] = Field(default_factory=list)
-    pair_evals: list[PairEvaluation] = Field(default_factory=list)
-    gold_evals_a: list[PairEvaluation] = Field(default_factory=list)
-    gold_evals_b: list[PairEvaluation] = Field(default_factory=list)
-    summary: SummaryReport | None = None
-    summary_a: SummaryReport | None = None
-    summary_b: SummaryReport | None = None
+    eval_a: list[EntityEvaluation] = Field(default_factory=list)
+    eval_b: list[EntityEvaluation] = Field(default_factory=list)
+    summary_a: EntitySummaryReport | None = None
+    summary_b: EntitySummaryReport | None = None
+    summary_compare: dict[str, Any] = Field(default_factory=dict)
     errors: list[str] = Field(default_factory=list)

@@ -1,0 +1,79 @@
+{
+  "input_md": "课件/MinerU_markdown_二战后苏俄舰艇全纪录.md",
+  "output_dir": "outputs/distill_ner",
+  "gold_jsonl": "src/workflow/distill_ner/gold/gold_entities_soviet_H_article_v1_min1200_max2600.jsonl",
+  "model_name": "deepseek-v4-pro",
+  "prediction_source": "model_output",
+  "chunk_count": 4,
+  "metrics": {
+    "entity_precision": 0.945205,
+    "entity_recall": 0.71134,
+    "entity_f1": 0.811765,
+    "type_accuracy": 0.927536
+  },
+  "counts": {
+    "tp": 69,
+    "fp": 4,
+    "fn": 28,
+    "wrong_type": 5,
+    "parse_error_count": 0
+  },
+  "errors_by_type": {
+    "missing_entity": 28,
+    "extra_entity": 4,
+    "wrong_type": 5,
+    "parse_error": 0
+  },
+  "chunk_errors": [
+    {
+      "chunk_id": "chunk_0001",
+      "error_type": "missing_entity",
+      "count": 9
+    },
+    {
+      "chunk_id": "chunk_0001",
+      "error_type": "extra_entity",
+      "count": 2
+    },
+    {
+      "chunk_id": "chunk_0001",
+      "error_type": "wrong_type",
+      "count": 1
+    },
+    {
+      "chunk_id": "chunk_0002",
+      "error_type": "missing_entity",
+      "count": 8
+    },
+    {
+      "chunk_id": "chunk_0002",
+      "error_type": "wrong_type",
+      "count": 1
+    },
+    {
+      "chunk_id": "chunk_0003",
+      "error_type": "missing_entity",
+      "count": 6
+    },
+    {
+      "chunk_id": "chunk_0003",
+      "error_type": "extra_entity",
+      "count": 2
+    },
+    {
+      "chunk_id": "chunk_0003",
+      "error_type": "wrong_type",
+      "count": 1
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "missing_entity",
+      "count": 5
+    },
+    {
+      "chunk_id": "chunk_0004",
+      "error_type": "wrong_type",
+      "count": 2
+    }
+  ]
+}

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 from dotenv import load_dotenv
 import json
@@ -17,15 +17,48 @@ def find_project_root(start: Path | None = None) -> Path:
     return current
 
 
+def _bool_env(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None or value == "":
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _int_env(name: str, default: int) -> int:
+    value = os.getenv(name)
+    if value is None or value.strip() == "":
+        return default
+    return int(value)
+
+
+def _float_env(name: str, default: float) -> float:
+    value = os.getenv(name)
+    if value is None or value.strip() == "":
+        return default
+    return float(value)
+
+
+def _json_env(name: str) -> dict:
+    value = os.getenv(name, "").strip()
+    if not value:
+        return {}
+    parsed = json.loads(value)
+    if not isinstance(parsed, dict):
+        raise ValueError(f"{name} must be a JSON object")
+    return parsed
+
+
 @dataclass(frozen=True)
 class ModelConfig:
     base_url: str
     api_key: str
     name: str
+    provider: str = "openai"
+    enable_thinking: bool = False
+    extra_body: dict = field(default_factory=dict)
     temperature: float = 0.0
-    max_tokens: int = 4096
+    max_tokens: int = 2048
     json_mode: bool = True
-    extra_body: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -37,49 +70,11 @@ class DistillNERConfig:
     gold_jsonl: Optional[str] = None
     min_chars: int = 1200
     max_chars: int = 2600
-
-
-def _env_bool(name: str, default: bool) -> bool:
-    value = os.getenv(name)
-    if value is None:
-        return default
-    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
-
-
-def _env_int(name: str, default: int) -> int:
-    try:
-        return int(os.getenv(name, str(default)).strip())
-    except Exception:
-        return default
-
-
-def _env_float(name: str, default: float) -> float:
-    try:
-        return float(os.getenv(name, str(default)).strip())
-    except Exception:
-        return default
-
-
-def _env_json(name: str) -> dict[str, Any]:
-    raw = os.getenv(name, "").strip()
-    if not raw:
-        return {}
-    try:
-        data = json.loads(raw)
-        return data if isinstance(data, dict) else {}
-    except Exception:
-        return {}
-
-
-def _build_extra_body(prefix: str) -> dict[str, Any]:
-    extra = _env_json(f"{prefix}_EXTRA_BODY_JSON")
-    # Qwen3 在 vLLM/OpenAI-compatible 服务中常用这个开关关闭 thinking，减少无关输出并提升 JSON 稳定性。
-    enable_thinking = _env_bool("DISTILL_NER_ENABLE_THINKING", False)
-    if "chat_template_kwargs" not in extra:
-        extra["chat_template_kwargs"] = {"enable_thinking": enable_thinking}
-    elif isinstance(extra["chat_template_kwargs"], dict):
-        extra["chat_template_kwargs"].setdefault("enable_thinking", enable_thinking)
-    return extra
+    task_mode: str = "entity_only"
+    reuse_model_a_output: bool = False
+    reuse_model_b_output: bool = False
+    model_a_cache_jsonl: str = ""
+    model_b_cache_jsonl: str = ""
 
 
 def load_config(
@@ -96,36 +91,36 @@ def load_config(
             raise ValueError(f"Missing required environment variable: {name}")
         return value
 
-    temperature = _env_float("DISTILL_NER_TEMPERATURE", 0.0)
-    max_tokens = _env_int("DISTILL_NER_MAX_TOKENS", 4096)
-    json_mode = _env_bool("DISTILL_NER_JSON_MODE", True)
+    temperature = _float_env("DISTILL_NER_TEMPERATURE", 0.0)
+    max_tokens = _int_env("DISTILL_NER_MAX_TOKENS", 2048)
+    json_mode = _bool_env("DISTILL_NER_JSON_MODE", True)
 
-    model_a = ModelConfig(
-        base_url=required("MODEL_A_BASE_URL"),
-        api_key=required("MODEL_A_API_KEY"),
-        name=required("MODEL_A_NAME"),
-        temperature=temperature,
-        max_tokens=max_tokens,
-        json_mode=json_mode,
-        extra_body=_build_extra_body("MODEL_A"),
-    )
-    model_b = ModelConfig(
-        base_url=required("MODEL_B_BASE_URL"),
-        api_key=required("MODEL_B_API_KEY"),
-        name=required("MODEL_B_NAME"),
-        temperature=temperature,
-        max_tokens=max_tokens,
-        json_mode=json_mode,
-        extra_body=_build_extra_body("MODEL_B"),
-    )
+    def model(prefix: str, default_provider: str) -> ModelConfig:
+        return ModelConfig(
+            base_url=required(f"{prefix}_BASE_URL"),
+            api_key=required(f"{prefix}_API_KEY"),
+            name=required(f"{prefix}_NAME"),
+            provider=os.getenv(f"{prefix}_PROVIDER", default_provider).strip() or default_provider,
+            enable_thinking=_bool_env(f"{prefix}_ENABLE_THINKING", False),
+            extra_body=_json_env(f"{prefix}_EXTRA_BODY_JSON"),
+            temperature=temperature,
+            max_tokens=max_tokens,
+            json_mode=json_mode,
+        )
+
     resolved_input = input_md or required("DISTILL_NER_INPUT_MD")
     resolved_output = output_dir or required("DISTILL_NER_OUTPUT_DIR")
     return DistillNERConfig(
-        model_a=model_a,
-        model_b=model_b,
+        model_a=model("MODEL_A", "deepseek"),
+        model_b=model("MODEL_B", "qwen_vllm"),
         input_md=resolved_input,
         output_dir=resolved_output,
         gold_jsonl=os.getenv("DISTILL_NER_GOLD_JSONL") or None,
-        min_chars=_env_int("DISTILL_NER_MIN_CHARS", 1200),
-        max_chars=_env_int("DISTILL_NER_MAX_CHARS", 2600),
+        min_chars=_int_env("DISTILL_NER_MIN_CHARS", 1200),
+        max_chars=_int_env("DISTILL_NER_MAX_CHARS", 2600),
+        task_mode=os.getenv("DISTILL_NER_TASK_MODE", "entity_only").strip() or "entity_only",
+        reuse_model_a_output=_bool_env("DISTILL_NER_REUSE_MODEL_A_OUTPUT", False),
+        reuse_model_b_output=_bool_env("DISTILL_NER_REUSE_MODEL_B_OUTPUT", False),
+        model_a_cache_jsonl=os.getenv("DISTILL_NER_MODEL_A_CACHE_JSONL", "").strip(),
+        model_b_cache_jsonl=os.getenv("DISTILL_NER_MODEL_B_CACHE_JSONL", "").strip(),
     )
