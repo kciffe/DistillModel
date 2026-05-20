@@ -8,6 +8,7 @@ class DatasetTask(TypedDict):
     batch_id: NotRequired[int]
 
 class JudgedQuestion(TypedDict):
+    id: NotRequired[str]
     category: str
     question: str
     score:int

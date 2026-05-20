@@ -12,15 +12,13 @@ from .dataset_storage import (
     append_generated_questions,
     append_judged_questions,
     count_passed_questions_by_category,
+    deduplicate_generated_questions,
     has_pending_dataset_tasks,
-    load_generated_questions,
     load_dataset_tasks,
-    load_judged_questions,
     load_pending_dataset_tasks,
 )
 from ..utils.logger import log_info,log_success
 from ..utils.progress import ThreadSafeProgress, progress_bar
-from ..utils.simhash import hamming_distance, simhash
 
 
 _GENERATION_PROGRESS=ThreadSafeProgress()
@@ -150,39 +148,8 @@ SIMHASH_THRESHOLD=6
 
 def deduplicate_questions(state: DataState):
     log_info("正在去重")
-    questions=load_generated_questions()
-    judged_questions=load_judged_questions()
-    judged_texts={question["question"].strip() for question in judged_questions}
-    deduplicated_questions=[]
-    # 保存已经见过的原始问题文本，用于完全相同文本去重。
-    seen_questions=set()
-    # 保存已经保留问题的 SimHash 指纹和文本，用于相似问题去重。
-    seen_fingerprints=[
-        (simhash(question["question"].strip()), question["question"].strip())
-        for question in judged_questions
-    ]
-
-    for question in questions:
-        text=question["question"].strip()
-        if text in judged_texts or text in seen_questions:
-            continue
-
-        fingerprint=simhash(text)
-        duplicate_question=None
-        for seen_fingerprint, seen_text in seen_fingerprints:
-            if hamming_distance(fingerprint, seen_fingerprint) <= SIMHASH_THRESHOLD:
-                duplicate_question=seen_text
-                break
-
-        if duplicate_question is not None:
-            log_info(f"当前条目为：{text},库中已存在相似条目：{duplicate_question}")
-            continue
-
-        seen_questions.add(text)
-        seen_fingerprints.append((fingerprint,text))
-        deduplicated_questions.append(question)
-
-    log_success(f"去重完成：原始{len(questions)}条，保留{len(deduplicated_questions)}条")
+    deduplicated_questions=deduplicate_generated_questions(SIMHASH_THRESHOLD)
+    log_success(f"去重完成：本轮新增保留{len(deduplicated_questions)}条")
     return {
         "deduplicated_questions":deduplicated_questions
     }
