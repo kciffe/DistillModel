@@ -258,4 +258,7 @@ def judge_round_complete(state: DataState):
     if not has_pending_dataset_tasks():
         final_questions=export_final_questions()
         log_success(f"最终问题集已导出：{len(final_questions)}条")
+        return {
+            "final_data": final_questions,
+        }
     return {}

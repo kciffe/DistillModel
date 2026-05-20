@@ -37,5 +37,5 @@ def runner():
 
 if __name__=="__main__":
     result=runner()
-    for question in result.get("final_data", []):
-        print(question)
+    final_data=result.get("final_data", [])
+    print(f"最终数据集生成完成，共{len(final_data)}条，已写入 data/final_questions.jsonl")

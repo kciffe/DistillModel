@@ -31,7 +31,7 @@ def build_graph():
         route_after_init,
         {
             "prepare":"prepare_task_batches",
-            "end":END,
+            "end":"judge_round_complete",
         }
     )
     G.add_conditional_edges(
