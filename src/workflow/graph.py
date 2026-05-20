@@ -6,6 +6,8 @@ from .nodes import (
     deduplicate_questions,
     init_pending_tasks,
     prepare_task_batches,
+    route_after_init,
+    route_after_judge,
     route_task_batches,
 
 )
@@ -21,7 +23,14 @@ def build_graph():
     G.add_node("judge_questino_llm",judge_questino_llm)
 
     G.add_edge(START,"init_pending_tasks")
-    G.add_edge("init_pending_tasks","prepare_task_batches")
+    G.add_conditional_edges(
+        "init_pending_tasks",
+        route_after_init,
+        {
+            "prepare":"prepare_task_batches",
+            "end":END,
+        }
+    )
     G.add_conditional_edges(
         "prepare_task_batches",
         route_task_batches,
@@ -29,7 +38,14 @@ def build_graph():
     )
     G.add_edge("generate_question_llm","deduplicate_questions")
     G.add_edge("deduplicate_questions","judge_questino_llm")
-    G.add_edge("judge_questino_llm",END)
+    G.add_conditional_edges(
+        "judge_questino_llm",
+        route_after_judge,
+        {
+            "continue":"init_pending_tasks",
+            "end":END,
+        }
+    )
     return G.compile()
 
 mainGraph=build_graph()

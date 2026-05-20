@@ -10,6 +10,8 @@ from .schema.schema_dataset import DatasetTask, JudgedQuestion
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TASKS_FILE = PROJECT_ROOT / "data" / "dataset_tasks.json"
 QUESTIONS_FILE = PROJECT_ROOT / "data" / "generated_questions.jsonl"
+JUDGED_QUESTIONS_FILE = PROJECT_ROOT / "data" / "judged_questions.jsonl"
+PASS_SCORE = 7
 _WRITE_LOCK = threading.Lock()
 
 
@@ -36,13 +38,35 @@ def count_questions_by_category() -> Counter[str]:
     return Counter(question["category"] for question in load_generated_questions())
 
 
+def load_judged_questions() -> list[JudgedQuestion]:
+    if not JUDGED_QUESTIONS_FILE.exists():
+        return []
+
+    questions: list[JudgedQuestion] = []
+    with JUDGED_QUESTIONS_FILE.open("r", encoding="utf-8") as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+            questions.append(json.loads(line))
+    return questions
+
+
+def count_passed_questions_by_category(filter_score:int=PASS_SCORE) -> Counter[str]:
+    return Counter(
+        question["category"]
+        for question in load_judged_questions()
+        if question.get("score", 0) >= filter_score
+    )
+
+
 def load_pending_dataset_tasks() -> list[DatasetTask]:
-    generated_counts = count_questions_by_category()
+    passed_counts = count_passed_questions_by_category()
     pending_tasks: list[DatasetTask] = []
 
     for task in load_dataset_tasks():
-        generated_count = generated_counts[task["category"]]
-        remaining_count = max(task["count"] - generated_count, 0)
+        passed_count = passed_counts[task["category"]]
+        remaining_count = max(task["count"] - passed_count, 0)
         if remaining_count == 0:
             continue
 
@@ -63,3 +87,19 @@ def append_generated_questions(questions: Iterable[JudgedQuestion]) -> None:
         with QUESTIONS_FILE.open("a", encoding="utf-8") as file:
             for question in question_list:
                 file.write(json.dumps(question, ensure_ascii=False) + "\n")
+
+
+def append_judged_questions(questions: Iterable[JudgedQuestion]) -> None:
+    question_list = list(questions)
+    if not question_list:
+        return
+
+    JUDGED_QUESTIONS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with _WRITE_LOCK:
+        with JUDGED_QUESTIONS_FILE.open("a", encoding="utf-8") as file:
+            for question in question_list:
+                file.write(json.dumps(question, ensure_ascii=False) + "\n")
+
+
+def has_pending_dataset_tasks() -> bool:
+    return bool(load_pending_dataset_tasks())

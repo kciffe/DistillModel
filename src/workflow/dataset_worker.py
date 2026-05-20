@@ -1,6 +1,4 @@
 
-from typing import List
-from .schema.schema_dataset import DatasetTask
 from .state_dataset import DataState
 from .graph import mainGraph
 from uuid import uuid4
@@ -16,8 +14,6 @@ def build_initial_dataset_state()->DataState:
             "deduplicated_questions":[],
             "final_data":[],
             "filtered_questions":[],
-            "failed_tasks":[],
-            "failed_questions":[],
 
         }
     )
@@ -29,6 +25,7 @@ def runner():
             "thread_id":str(uuid4().hex),
         },
         "max_concurrency": 16,
+        "recursion_limit": 200,
     }
     return mainGraph.invoke(
         datasetState,
