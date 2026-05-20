@@ -13,9 +13,12 @@ def build_initial_dataset_state()->DataState:
             "pending_tasks":[],
             "current_task":None,
             "questions":[],
+            "deduplicated_questions":[],
             "final_data":[],
+            "filtered_questions":[],
             "failed_tasks":[],
             "failed_questions":[],
+
         }
     )
 

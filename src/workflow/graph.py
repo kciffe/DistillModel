@@ -28,7 +28,8 @@ def build_graph():
         ["generate_question_llm"]
     )
     G.add_edge("generate_question_llm","deduplicate_questions")
-    G.add_edge("deduplicate_questions",END)
+    G.add_edge("deduplicate_questions","judge_questino_llm")
+    G.add_edge("judge_questino_llm",END)
     return G.compile()
 
 mainGraph=build_graph()

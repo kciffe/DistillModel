@@ -1,5 +1,6 @@
 
 import hashlib
+import re
 import threading
 import time
 
@@ -186,20 +187,85 @@ def deduplicate_questions(state: DataState):
 
     log_success(f"去重完成：原始{len(questions)}条，保留{len(deduplicated_questions)}条")
     return {
-        "final_data":deduplicated_questions
+        "deduplicated_questions":deduplicated_questions
     }
 
 # 打分节点
-def judge_questino_llm(state: DataState):
+JUDGE_BATCH_SIZE=20
+
+def _extract_scores(text: str) -> list[int]:
+    scores=[]
+    for line in text.splitlines():
+        line=line.strip()
+        if not line:
+            continue
+        match=re.search(r"\b[0-9]\b", line)
+        if match:
+            scores.append(int(match.group()))
+    return scores
+
+
+def judge_questino_llm(state: DataState,filter_score:int=7):
     log_info("正在打分")
+    questions=state.get("deduplicated_questions") or []
+    if not questions:
+        log_info("没有可打分的问题")
+        return {
+            "final_data":[],
+            "filtered_questions":[],
+        }
+
     model=get_llm_without_tools()
-    response=model.invoke(
-        [
-            HumanMessage(content=JUDGE_QUESTION_PROMPT)
-        ]
-    )
+    judged_questions=[]
+    filtered_questions=[]
+
+    for start in range(0,len(questions),JUDGE_BATCH_SIZE):
+        batch_questions=questions[start:start+JUDGE_BATCH_SIZE]
+        input_text="\n".join(
+            f"{index}. 类别：{question['category']}；问题：{question['question']}"
+            for index, question in enumerate(batch_questions, start=1)
+        )
+        score_prompt=f"""
+            你是一位婚姻法方面的专家。请判断每条【问题】是否准确属于它标注的【类别】。
+            给出一个0到9之间的正整数评分，其中0表示完全错误，9表示非常准确。
+            每条输入都需要单独判定。
+
+            只允许输出评分，每个评分单独一行，不允许输出任何其他字符。
+
+            【输入】
+            {input_text}
+
+            输出举例（10个传入问题时）:
+            9
+            7
+            8
+            7
+            7
+            7
+            7 
+            0
+            7
+            1
+            """
+        response=model.invoke([HumanMessage(content=score_prompt)])
+        scores=_extract_scores(response.content)
+
+        if len(scores) != len(batch_questions):
+            log_info(f"打分数量不匹配：输入{len(batch_questions)}条，输出{len(scores)}条")
+
+        for question, score in zip(batch_questions, scores):
+            judged_question=question.copy()
+            judged_question["score"]=score
+            if score >= filter_score:
+                judged_questions.append(judged_question)
+            else:
+                filtered_questions.append(judged_question)
+
+    log_success(f"打分完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条")
     return {
+        "final_data":judged_questions,
+        "filtered_questions":filtered_questions,
         "messages":[
-            AIMessage(content=response.content)
+            AIMessage(content=f"打分完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条")
         ]
     }
