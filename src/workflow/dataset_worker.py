@@ -10,6 +10,8 @@ def build_initial_dataset_state()->DataState:
             "messages":[],
             "pending_tasks":[],
             "current_task":None,
+            "judge_questions":[],
+            "judge_batch_id":None,
             "questions":[],
             "deduplicated_questions":[],
             "final_data":[],

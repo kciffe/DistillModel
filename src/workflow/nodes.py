@@ -168,6 +168,7 @@ def route_after_judge(state: DataState):
 
 # 打分节点
 JUDGE_BATCH_SIZE=20
+_JUDGE_PROGRESS=ThreadSafeProgress()
 
 def _extract_scores(text: str) -> list[int]:
     scores=[]
@@ -181,78 +182,103 @@ def _extract_scores(text: str) -> list[int]:
     return scores
 
 
-def judge_questino_llm(state: DataState,filter_score:int=7):
-    log_info("正在打分")
+def route_judge_batches(state: DataState):
     questions=state.get("deduplicated_questions") or []
     if not questions:
-        log_info("没有可打分的问题")
-        return {
-            "final_data":[],
-            "filtered_questions":[],
-        }
+        return "complete"
 
-    model=get_llm_without_tools()
+    batches=[
+        questions[start:start+JUDGE_BATCH_SIZE]
+        for start in range(0,len(questions),JUDGE_BATCH_SIZE)
+    ]
+    _JUDGE_PROGRESS.reset(len(batches))
+    log_info(f"正在路由打分批次：共{len(batches)}批")
+    return [
+        Send(
+            "judge_question_batch_llm",
+            {
+                "judge_questions":batch_questions,
+                "judge_batch_id":batch_index,
+            }
+        )
+        for batch_index,batch_questions in enumerate(batches,start=1)
+    ]
+
+
+def judge_question_batch_llm(state: DataState,filter_score:int=7):
+    batch_questions=state.get("judge_questions") or []
+    batch_id=state.get("judge_batch_id") or 0
+    if not batch_questions:
+        return {}
+
+    thread_id=threading.get_ident()
+    started_at=time.perf_counter()
+    log_info(f"开始打分批次：batch_id={batch_id}，本批{len(batch_questions)}条 thread={thread_id}")
     judged_questions=[]
     filtered_questions=[]
 
-    total_batches=(len(questions)+JUDGE_BATCH_SIZE-1)//JUDGE_BATCH_SIZE
-    for batch_index,start in enumerate(range(0,len(questions),JUDGE_BATCH_SIZE), start=1):
-        batch_questions=questions[start:start+JUDGE_BATCH_SIZE]
-        log_info(f"开始打分批次：{progress_bar(batch_index-1,total_batches)}，本批{len(batch_questions)}条")
-        input_text="\n".join(
-            f"{index}. 类别：{question['category']}；问题：{question['question']}"
-            for index, question in enumerate(batch_questions, start=1)
-        )
-        score_prompt=f"""
-            你是一位婚姻法方面的专家。请判断每条【问题】是否准确属于它标注的【类别】。
-            给出一个0到9之间的正整数评分，其中0表示完全错误，9表示非常准确。
-            每条输入都需要单独判定。
+    input_text="\n".join(
+        f"{index}. 类别：{question['category']}；问题：{question['question']}"
+        for index, question in enumerate(batch_questions, start=1)
+    )
+    score_prompt=f"""
+        你是一位婚姻法方面的专家。请判断每条【问题】是否准确属于它标注的【类别】。
+        给出一个0到9之间的正整数评分，其中0表示完全错误，9表示非常准确。
+        每条输入都需要单独判定。
 
-            只允许输出评分，每个评分单独一行，不允许输出任何其他字符。
+        只允许输出评分，每个评分单独一行，不允许输出任何其他字符。
 
-            【输入】
-            {input_text}
+        【输入】
+        {input_text}
 
-            输出举例（10个传入问题时）:
-            9
-            7
-            8
-            7
-            7
-            7
-            7 
-            0
-            7
-            1
-            """
-        response=model.invoke([HumanMessage(content=score_prompt)])
-        scores=_extract_scores(response.content)
+        输出举例（10个传入问题时）:
+        9
+        7
+        8
+        7
+        7
+        7
+        7
+        0
+        7
+        1
+        """
+    model=get_llm_without_tools()
+    response=model.invoke([HumanMessage(content=score_prompt)])
+    scores=_extract_scores(response.content)
 
-        if len(scores) != len(batch_questions):
-            log_info(f"打分数量不匹配：输入{len(batch_questions)}条，输出{len(scores)}条")
+    if len(scores) != len(batch_questions):
+        log_info(f"打分数量不匹配：输入{len(batch_questions)}条，输出{len(scores)}条")
 
-        for question, score in zip(batch_questions, scores):
-            judged_question=question.copy()
-            judged_question["score"]=score
-            if score >= filter_score:
-                judged_questions.append(judged_question)
-            else:
-                filtered_questions.append(judged_question)
+    for question, score in zip(batch_questions, scores):
+        judged_question=question.copy()
+        judged_question["score"]=score
+        if score >= filter_score:
+            judged_questions.append(judged_question)
+        else:
+            filtered_questions.append(judged_question)
 
-        if len(scores) < len(batch_questions):
-            for question in batch_questions[len(scores):]:
-                failed_question=question.copy()
-                failed_question["score"]=0
-                filtered_questions.append(failed_question)
+    if len(scores) < len(batch_questions):
+        for question in batch_questions[len(scores):]:
+            failed_question=question.copy()
+            failed_question["score"]=0
+            filtered_questions.append(failed_question)
 
-        log_success(f"完成打分批次：{progress_bar(batch_index,total_batches)}")
-
+    elapsed=time.perf_counter()-started_at
     append_judged_questions(judged_questions + filtered_questions)
-    log_success(f"打分完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条，已写入文件")
+    done,total=_JUDGE_PROGRESS.mark_done()
+    log_success(
+        f"完成打分批次：batch_id={batch_id} 通过{len(judged_questions)}条，"
+        f"过滤{len(filtered_questions)}条，已写入文件 打分进度={progress_bar(done,total)} "
+        f"thread={thread_id} elapsed={elapsed:.2f}s"
+    )
     return {
-        "final_data":judged_questions,
-        "filtered_questions":filtered_questions,
         "messages":[
-            AIMessage(content=f"打分完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条")
+            AIMessage(content=f"打分批次{batch_id}完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条")
         ]
     }
+
+
+def judge_round_complete(state: DataState):
+    log_success("本轮打分批次已全部完成")
+    return {}

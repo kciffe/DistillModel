@@ -2,12 +2,14 @@
 from langgraph.graph import StateGraph,END,START
 from .nodes import (
     generate_question_llm,
-    judge_questino_llm,
+    judge_question_batch_llm,
+    judge_round_complete,
     deduplicate_questions,
     init_pending_tasks,
     prepare_task_batches,
     route_after_init,
     route_after_judge,
+    route_judge_batches,
     route_task_batches,
 
 )
@@ -20,7 +22,8 @@ def build_graph():
     G.add_node("prepare_task_batches",prepare_task_batches)
     G.add_node("generate_question_llm",generate_question_llm)
     G.add_node("deduplicate_questions",deduplicate_questions)
-    G.add_node("judge_questino_llm",judge_questino_llm)
+    G.add_node("judge_question_batch_llm",judge_question_batch_llm)
+    G.add_node("judge_round_complete",judge_round_complete)
 
     G.add_edge(START,"init_pending_tasks")
     G.add_conditional_edges(
@@ -37,9 +40,17 @@ def build_graph():
         ["generate_question_llm"]
     )
     G.add_edge("generate_question_llm","deduplicate_questions")
-    G.add_edge("deduplicate_questions","judge_questino_llm")
     G.add_conditional_edges(
-        "judge_questino_llm",
+        "deduplicate_questions",
+        route_judge_batches,
+        {
+            "judge_question_batch_llm":"judge_question_batch_llm",
+            "complete":"judge_round_complete",
+        }
+    )
+    G.add_edge("judge_question_batch_llm","judge_round_complete")
+    G.add_conditional_edges(
+        "judge_round_complete",
         route_after_judge,
         {
             "continue":"init_pending_tasks",

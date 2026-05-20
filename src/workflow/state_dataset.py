@@ -8,6 +8,8 @@ class DataState(TypedDict):
 
     pending_tasks: List[DatasetTask] | None        # 待处理任务队列
     current_task: DatasetTask |None         # 当前正在处理的任务
+    judge_questions: List[JudgedQuestion] | None         # 当前待打分批次
+    judge_batch_id: int | None
     questions: List[JudgedQuestion] | None             # 当前轮生成出来的问题
     deduplicated_questions: List[JudgedQuestion] | None             # 去重后的问题
     final_data: List[JudgedQuestion] | None            # 当前轮最终保留的数据
