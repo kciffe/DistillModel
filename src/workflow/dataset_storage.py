@@ -14,6 +14,7 @@ TASKS_FILE = PROJECT_ROOT / "data" / "dataset_tasks.json"
 QUESTIONS_FILE = PROJECT_ROOT / "data" / "generated_questions.jsonl"
 DEDUPED_QUESTIONS_FILE = PROJECT_ROOT / "data" / "deduped_questions.jsonl"
 JUDGED_QUESTIONS_FILE = PROJECT_ROOT / "data" / "judged_questions.jsonl"
+FINAL_QUESTIONS_FILE = PROJECT_ROOT / "data" / "final_questions.jsonl"
 FINGERPRINT_INDEX_FILE = PROJECT_ROOT / "data" / "question_fingerprint_index.jsonl"
 PASS_SCORE = 7
 _WRITE_LOCK = threading.Lock()
@@ -190,3 +191,35 @@ def deduplicate_generated_questions(threshold: int) -> list[JudgedQuestion]:
     _append_jsonl(DEDUPED_QUESTIONS_FILE, deduped_questions)
     _append_jsonl(FINGERPRINT_INDEX_FILE, new_index_rows)
     return deduped_questions
+
+
+def export_final_questions(filter_score:int=PASS_SCORE) -> list[JudgedQuestion]:
+    quotas = {task["category"]: task["count"] for task in load_dataset_tasks()}
+    selected_counts: Counter[str] = Counter()
+    final_questions: list[JudgedQuestion] = []
+    seen_ids: set[str] = set()
+
+    for question in iter_judged_questions():
+        if question.get("score", 0) < filter_score:
+            continue
+
+        category = question["category"]
+        if selected_counts[category] >= quotas.get(category, 0):
+            continue
+
+        qid = question.get("id") or question_id(question)
+        if qid in seen_ids:
+            continue
+
+        row = dict(question)
+        row["id"] = qid
+        seen_ids.add(qid)
+        selected_counts[category] += 1
+        final_questions.append(row)
+
+    FINAL_QUESTIONS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with FINAL_QUESTIONS_FILE.open("w", encoding="utf-8") as file:
+        for question in final_questions:
+            file.write(json.dumps(question, ensure_ascii=False) + "\n")
+
+    return final_questions

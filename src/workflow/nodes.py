@@ -1,7 +1,5 @@
 
 import re
-import threading
-import time
 
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.types import Send
@@ -13,12 +11,13 @@ from .dataset_storage import (
     append_judged_questions,
     count_passed_questions_by_category,
     deduplicate_generated_questions,
+    export_final_questions,
     has_pending_dataset_tasks,
     load_dataset_tasks,
     load_pending_dataset_tasks,
 )
 from ..utils.logger import log_info,log_success
-from ..utils.progress import ThreadSafeProgress, progress_bar
+from ..utils.progress import ThreadSafeProgress
 
 
 _GENERATION_PROGRESS=ThreadSafeProgress()
@@ -62,12 +61,10 @@ def prepare_task_batches(state:DataState):
             batch_task["batch_id"] = batch_id
 
             batch_tasks.append(batch_task)
-
-            log_info(f"创建任务批次：{task['category']}，批次ID：{batch_id}，批次大小：{batch_count}，批次开始索引：{start}，批次结束索引：{start+batch_count}")
             batch_id+=1
 
-    _GENERATION_PROGRESS.reset(len(batch_tasks))
     log_info(f"本轮生成批次数：{len(batch_tasks)}")
+    _GENERATION_PROGRESS.reset(len(batch_tasks), desc="生成问题")
 
     return {
         "pending_tasks":batch_tasks
@@ -75,7 +72,6 @@ def prepare_task_batches(state:DataState):
 
 # 路由任务节点,并发分发任务
 def route_task_batches(state:DataState):
-    log_info("正在路由任务批次")
     pending_tasks=state.get("pending_tasks") or []
 
     return [
@@ -93,13 +89,6 @@ def generate_question_llm(state: DataState):
     if task is None:
         return {}
 
-    thread_id=threading.get_ident()
-    started_at=time.perf_counter()
-    log_info(
-        f"开始生成问题：category={task['category']} batch_id={task['batch_id']} "
-        f"count={task['count']} thread={thread_id}"
-    )
-    
     prompt=f"""
         你是一位婚姻法方面的专家，根据【特定类别】的定义，针对其中{task["category"]}方面的规定，向学生提供{task["count"]}道练习题，你能提出哪些问题？
         每个问题单独一行，只允许输出问题本身，不允许输出任何其他字符。
@@ -130,14 +119,8 @@ def generate_question_llm(state: DataState):
         }
         for question in question_list
     ]
-    elapsed=time.perf_counter()-started_at
     append_generated_questions(questions)
-    done,total=_GENERATION_PROGRESS.mark_done()
-    log_success(
-        f"完成生成问题：category={task['category']} batch_id={task['batch_id']} "
-        f"生成数={len(questions)} 已写入文件 生成进度={progress_bar(done,total)} "
-        f"thread={thread_id} elapsed={elapsed:.2f}s"
-    )
+    _GENERATION_PROGRESS.mark_done()
     return {
         "messages":[
             AIMessage(content=response.content)
@@ -191,8 +174,8 @@ def route_judge_batches(state: DataState):
         questions[start:start+JUDGE_BATCH_SIZE]
         for start in range(0,len(questions),JUDGE_BATCH_SIZE)
     ]
-    _JUDGE_PROGRESS.reset(len(batches))
     log_info(f"正在路由打分批次：共{len(batches)}批")
+    _JUDGE_PROGRESS.reset(len(batches), desc="打分")
     return [
         Send(
             "judge_question_batch_llm",
@@ -211,9 +194,6 @@ def judge_question_batch_llm(state: DataState,filter_score:int=7):
     if not batch_questions:
         return {}
 
-    thread_id=threading.get_ident()
-    started_at=time.perf_counter()
-    log_info(f"开始打分批次：batch_id={batch_id}，本批{len(batch_questions)}条 thread={thread_id}")
     judged_questions=[]
     filtered_questions=[]
 
@@ -264,14 +244,8 @@ def judge_question_batch_llm(state: DataState,filter_score:int=7):
             failed_question["score"]=0
             filtered_questions.append(failed_question)
 
-    elapsed=time.perf_counter()-started_at
     append_judged_questions(judged_questions + filtered_questions)
-    done,total=_JUDGE_PROGRESS.mark_done()
-    log_success(
-        f"完成打分批次：batch_id={batch_id} 通过{len(judged_questions)}条，"
-        f"过滤{len(filtered_questions)}条，已写入文件 打分进度={progress_bar(done,total)} "
-        f"thread={thread_id} elapsed={elapsed:.2f}s"
-    )
+    _JUDGE_PROGRESS.mark_done()
     return {
         "messages":[
             AIMessage(content=f"打分批次{batch_id}完成：通过{len(judged_questions)}条，过滤{len(filtered_questions)}条")
@@ -281,4 +255,7 @@ def judge_question_batch_llm(state: DataState,filter_score:int=7):
 
 def judge_round_complete(state: DataState):
     log_success("本轮打分批次已全部完成")
+    if not has_pending_dataset_tasks():
+        final_questions=export_final_questions()
+        log_success(f"最终问题集已导出：{len(final_questions)}条")
     return {}
