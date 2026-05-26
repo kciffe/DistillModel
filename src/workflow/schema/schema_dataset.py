@@ -12,3 +12,4 @@ class JudgedQuestion(TypedDict):
     category: str
     question: str
     score:int
+    answer: str

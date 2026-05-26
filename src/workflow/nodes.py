@@ -137,6 +137,10 @@ def deduplicate_questions(state: DataState):
         "deduplicated_questions":deduplicated_questions
     }
 
+# 答案生成节点
+def generate_answer_llm(state: DataState):
+    deduplicate_questions=state.get("deduplicated_questions")
+    
 
 def route_after_init(state: DataState):
     if state.get("pending_tasks"):
